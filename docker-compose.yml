@@ -1,0 +1,39 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  nodered:
+    image: nodered/node-red
+    environment:
+      - TZ=Australia/Sydney
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./node_red/data:/data
+      - ./data:/data/raw
+
+  influx:
+    image: influxdb:1.8
+    environment:
+      - TZ=Australia/Sydney
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./influx:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana-oss
+    environment:
+      - TZ=Australia/Sydney
+    ports:
+      - "3000:3000"
+  
+  mqtt:
+    image: eclipse-mosquitto
+    ports:
+      - "1883:1883"
+      # - "9001:9001"
+    # volumes:
+    #   # - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    #   - ./mosquitto_data:/mosquitto/data
+    #   - ./mosquitto_log:/mosquitto/log
+    
+

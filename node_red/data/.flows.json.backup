@@ -1,0 +1,123 @@
+[
+    {
+        "id": "188101eeafe3ebb0",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8fad4f9d5cf2899b",
+        "type": "inject",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "/data/raw/battery/battery1.csv",
+        "payload": "",
+        "payloadType": "date",
+        "x": 340,
+        "y": 100,
+        "wires": [
+            [
+                "a48cb16765d50fc5"
+            ]
+        ]
+    },
+    {
+        "id": "79afd76a0ef0b6e4",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 710,
+        "y": 100,
+        "wires": [
+            [
+                "f2c47fa10c24f612"
+            ]
+        ]
+    },
+    {
+        "id": "48ef9ea37327e245",
+        "type": "debug",
+        "z": "188101eeafe3ebb0",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "a48cb16765d50fc5",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.topic'",
+        "filename": "topic",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 520,
+        "y": 100,
+        "wires": [
+            [
+                "79afd76a0ef0b6e4"
+            ]
+        ]
+    },
+    {
+        "id": "f2c47fa10c24f612",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 890,
+        "y": 100,
+        "wires": [
+            [
+                "48ef9ea37327e245"
+            ]
+        ]
+    }
+]

@@ -1,0 +1,42 @@
+ID_battery:                     Battery ID
+Area_Temp_1 - Area_Temp_4:	Battery Area Temperatures
+Total_Vol_BatteryGroup:		Total Battery Voltage (contain 16 cells)
+Current:			Current ( positive = Change, negative = Discharge)
+SOC:				State of Change (0-100%)
+Charge_MOS:			MOS_FET State(1=idle, 2=Charge, 3=Discharge)
+ID_Battery_Type:		Li-Ion Battery Type(1=Lithium Iron Phosphate) 
+Nominal_capacity:		Battery Nominal Capacity (Ah)
+Average_Cell_Vol:		Average Cell Voltage (mv)
+MOS_temp:			MOS_FET Temperature
+Max_Cell_Vol:			Maxmal Cell Voltage (mv)
+No_Max_Cell_Vol:		The Cell Number of Maxmium Voltage
+Min_Cell_Vol:			Minmal Cell Voltage (mv)
+No_Min_Cell_Vol:		The Cell Number of Minmium Voltage
+Discharge_Capacity:		Discharge Capacity (Ah)
+Charging_Capacity:		Charged Capacity (Ah)
+NoOfCells:			The Number of Cells in the battery
+No_temp:			The Number of Temperature Sensors
+Cell_Balance:			The Cell Balancing setting, higher capacity cells undergo a full charge/ discharge cycle
+ID_Warning:			The Warning Bits
+GPS_Latitude:			GPS Latitude of Location
+GPS_Longtitude:			GPS Longtitude of Location
+
+Appendix:
+
+Warning bits:
+bit0:  				Cell Over Voltage 
+Bit1:				Low Cell Voltage
+Bit2:				Charge Over Current 1
+Bit3:				Discharge Over Current
+Bit4:				Charge Over Current 2
+Bit5:				Charge Over Temperature
+Bit6:				Low Charge Temperature
+Bit7:				Discharge Over Temperature
+Bit8:				Low SOC 
+Bit9:				Over Voltage Difference 
+Bit10:				Over Temperature Difference 
+Bit11:				Over Total Voltage
+Bit12:				Low Total Voltage
+Bit13:				MOS_FET Over Temperature
+Bit14:				Charge/Discharge Over Temperature
+Bit15:				Short Circuit				
