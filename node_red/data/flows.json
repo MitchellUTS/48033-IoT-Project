@@ -8,41 +8,122 @@
         "env": []
     },
     {
-        "id": "8fad4f9d5cf2899b",
+        "id": "c5555d2e3dd06c96",
+        "type": "mqtt-broker",
+        "name": "Docker MQTT Broker",
+        "broker": "mqtt",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "1682bc03b239dcad",
+        "type": "function",
+        "z": "188101eeafe3ebb0",
+        "name": "Array of 1 - N",
+        "func": "function array1ToN(N) {\n    return [...Array(N).keys()].map(n => n + 1)\n}\n\nconst num_batteries = parseInt(msg.num_batteries);\n\nmsg.payload = array1ToN(num_batteries);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 40,
+        "wires": [
+            [
+                "93c00538a297b189"
+            ]
+        ]
+    },
+    {
+        "id": "ce830363474e3d62",
         "type": "inject",
         "z": "188101eeafe3ebb0",
-        "name": "battery1",
+        "name": "num_batteries",
         "props": [
             {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
+                "p": "num_batteries",
+                "v": "3",
+                "vt": "num"
             }
         ],
         "repeat": "",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "/data/raw/battery/battery1.csv",
-        "payload": "",
-        "payloadType": "date",
-        "x": 340,
-        "y": 100,
+        "topic": "",
+        "x": 130,
+        "y": 40,
         "wires": [
             [
-                "a48cb16765d50fc5"
+                "1682bc03b239dcad"
             ]
         ]
     },
     {
-        "id": "79afd76a0ef0b6e4",
+        "id": "93c00538a297b189",
+        "type": "split",
+        "z": "188101eeafe3ebb0",
+        "name": "Split into N messages",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 480,
+        "y": 40,
+        "wires": [
+            [
+                "0021b31d2856ce7c"
+            ]
+        ]
+    },
+    {
+        "id": "b3a07bd26ccf0b90",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 350,
+        "y": 100,
+        "wires": [
+            [
+                "400cdbca7acaaf99"
+            ]
+        ]
+    },
+    {
+        "id": "400cdbca7acaaf99",
         "type": "csv",
         "z": "188101eeafe3ebb0",
         "name": "Parse CSV",
         "sep": ",",
-        "hdrin": "",
+        "hdrin": true,
         "hdrout": "none",
         "multi": "one",
         "ret": "\\n",
@@ -51,52 +132,16 @@
         "strings": true,
         "include_empty_strings": "",
         "include_null_values": "",
-        "x": 710,
+        "x": 530,
         "y": 100,
         "wires": [
             [
-                "f2c47fa10c24f612"
+                "c1c1fa03a42f08c1"
             ]
         ]
     },
     {
-        "id": "48ef9ea37327e245",
-        "type": "debug",
-        "z": "188101eeafe3ebb0",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1060,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "a48cb16765d50fc5",
-        "type": "file in",
-        "z": "188101eeafe3ebb0",
-        "name": "read 'msg.topic'",
-        "filename": "topic",
-        "filenameType": "msg",
-        "format": "utf8",
-        "chunk": false,
-        "sendError": false,
-        "encoding": "none",
-        "allProps": false,
-        "x": 520,
-        "y": 100,
-        "wires": [
-            [
-                "79afd76a0ef0b6e4"
-            ]
-        ]
-    },
-    {
-        "id": "f2c47fa10c24f612",
+        "id": "0de3f3d291ddd11b",
         "type": "delay",
         "z": "188101eeafe3ebb0",
         "name": "",
@@ -112,41 +157,241 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 890,
-        "y": 100,
+        "x": 850,
+        "y": 120,
         "wires": [
             [
-                "48ef9ea37327e245"
+                "085c2442a261d058"
             ]
         ]
     },
     {
-        "id": "8f059f87b0687531",
-        "type": "inject",
+        "id": "3994cc2be2c8ba57",
+        "type": "debug",
         "z": "188101eeafe3ebb0",
-        "name": "battery2",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "/data/raw/battery/battery1.csv",
-        "payload": "",
-        "payloadType": "date",
-        "x": 340,
-        "y": 140,
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "0e63fad5e834cc2a",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 850,
+        "y": 200,
         "wires": [
             [
-                "a48cb16765d50fc5"
+                "085c2442a261d058"
             ]
         ]
+    },
+    {
+        "id": "0021b31d2856ce7c",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "battery_id",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 680,
+        "y": 40,
+        "wires": [
+            [
+                "55ccc8b09fa15b12"
+            ]
+        ]
+    },
+    {
+        "id": "c1c1fa03a42f08c1",
+        "type": "switch",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "property": "battery_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 710,
+        "y": 160,
+        "wires": [
+            [
+                "0de3f3d291ddd11b"
+            ],
+            [
+                "0e63fad5e834cc2a"
+            ]
+        ]
+    },
+    {
+        "id": "55ccc8b09fa15b12",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/battery/battery{{battery_id}}.csv",
+        "output": "str",
+        "x": 150,
+        "y": 100,
+        "wires": [
+            [
+                "b3a07bd26ccf0b90"
+            ]
+        ]
+    },
+    {
+        "id": "5e014141b5e549b0",
+        "type": "mqtt out",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "topic": "test",
+        "qos": "1",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "c5555d2e3dd06c96",
+        "x": 1130,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "085c2442a261d058",
+        "type": "link out",
+        "z": "188101eeafe3ebb0",
+        "name": "Output from all Rate Limit (Source)",
+        "mode": "link",
+        "links": [
+            "07c20f09292c98b5"
+        ],
+        "x": 975,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "07c20f09292c98b5",
+        "type": "link in",
+        "z": "188101eeafe3ebb0",
+        "name": "Output from all Rate Limit (Sink)",
+        "links": [
+            "085c2442a261d058"
+        ],
+        "x": 1035,
+        "y": 160,
+        "wires": [
+            [
+                "5e014141b5e549b0",
+                "3994cc2be2c8ba57"
+            ]
+        ]
+    },
+    {
+        "id": "66348088ae8a8076",
+        "type": "mqtt in",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "topic": "test",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "c5555d2e3dd06c96",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 280,
+        "wires": [
+            [
+                "1c551eb69ab21df4"
+            ]
+        ]
+    },
+    {
+        "id": "1c551eb69ab21df4",
+        "type": "debug",
+        "z": "188101eeafe3ebb0",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload.ID_Battery",
+        "statusType": "msg",
+        "x": 260,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "70f4911cf90c8f98",
+        "type": "comment",
+        "z": "188101eeafe3ebb0",
+        "name": "Purpose of this 'link'",
+        "info": "This link just allows me to group\nthe output of all the possibly many\nmessage queues so they can easily\nbe funneled into a MQTT topic or\nto debug, etc.",
+        "x": 1010,
+        "y": 80,
+        "wires": []
     }
 ]

@@ -25,15 +25,15 @@ services:
       - TZ=Australia/Sydney
     ports:
       - "3000:3000"
-  
+
   mqtt:
     image: eclipse-mosquitto
     ports:
       - "1883:1883"
       # - "9001:9001"
-    # volumes:
-    #   # - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
     #   - ./mosquitto_data:/mosquitto/data
     #   - ./mosquitto_log:/mosquitto/log
-    
+
 
