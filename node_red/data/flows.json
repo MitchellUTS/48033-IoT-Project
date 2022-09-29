@@ -35,6 +35,20 @@
         "sessionExpiry": ""
     },
     {
+        "id": "94405edd896f3970",
+        "type": "influxdb",
+        "hostname": "influx",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "Docker Influx",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true
+    },
+    {
         "id": "1682bc03b239dcad",
         "type": "function",
         "z": "188101eeafe3ebb0",
@@ -2520,7 +2534,7 @@
         "id": "fad20bb06c0df79c",
         "type": "inject",
         "z": "188101eeafe3ebb0",
-        "name": "",
+        "name": "start simulation",
         "props": [
             {
                 "p": "payload"
@@ -2537,7 +2551,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 260,
+        "x": 280,
         "y": 1760,
         "wires": [
             [
@@ -2599,8 +2613,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 170,
-        "y": 2220,
+        "x": 230,
+        "y": 2160,
         "wires": [
             [
                 "d96c8ef6ed75683f",
@@ -2622,8 +2636,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 180,
-        "y": 2160,
+        "x": 220,
+        "y": 2100,
         "wires": [
             [
                 "19078db6683953f5",
@@ -2725,7 +2739,7 @@
         "type": "debug",
         "z": "188101eeafe3ebb0",
         "name": "debug 3",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": true,
@@ -2733,7 +2747,7 @@
         "targetType": "msg",
         "statusVal": "payload.ID_Battery",
         "statusType": "msg",
-        "x": 2100,
+        "x": 2160,
         "y": 1900,
         "wires": []
     },

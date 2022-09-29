@@ -35,6 +35,20 @@
         "sessionExpiry": ""
     },
     {
+        "id": "94405edd896f3970",
+        "type": "influxdb",
+        "hostname": "influx",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "Docker Influx",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true
+    },
+    {
         "id": "1682bc03b239dcad",
         "type": "function",
         "z": "188101eeafe3ebb0",
@@ -139,23 +153,6 @@
                 "ae15c05790df9d11"
             ]
         ]
-    },
-    {
-        "id": "3994cc2be2c8ba57",
-        "type": "debug",
-        "z": "188101eeafe3ebb0",
-        "name": "debug 2",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1840,
-        "y": 100,
-        "wires": []
     },
     {
         "id": "0021b31d2856ce7c",
@@ -265,102 +262,6 @@
                 "b3a07bd26ccf0b90"
             ]
         ]
-    },
-    {
-        "id": "5e014141b5e549b0",
-        "type": "mqtt out",
-        "z": "188101eeafe3ebb0",
-        "name": "",
-        "topic": "test",
-        "qos": "1",
-        "retain": "true",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "c5555d2e3dd06c96",
-        "x": 1830,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "085c2442a261d058",
-        "type": "link out",
-        "z": "188101eeafe3ebb0",
-        "name": "Output from all Rate Limit (Source)",
-        "mode": "link",
-        "links": [
-            "07c20f09292c98b5"
-        ],
-        "x": 1675,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "07c20f09292c98b5",
-        "type": "link in",
-        "z": "188101eeafe3ebb0",
-        "name": "Output from all Rate Limit (Sink)",
-        "links": [
-            "085c2442a261d058"
-        ],
-        "x": 1735,
-        "y": 140,
-        "wires": [
-            [
-                "5e014141b5e549b0",
-                "3994cc2be2c8ba57"
-            ]
-        ]
-    },
-    {
-        "id": "66348088ae8a8076",
-        "type": "mqtt in",
-        "z": "188101eeafe3ebb0",
-        "name": "",
-        "topic": "test",
-        "qos": "2",
-        "datatype": "json",
-        "broker": "c5555d2e3dd06c96",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 1830,
-        "y": 280,
-        "wires": [
-            [
-                "1c551eb69ab21df4"
-            ]
-        ]
-    },
-    {
-        "id": "1c551eb69ab21df4",
-        "type": "debug",
-        "z": "188101eeafe3ebb0",
-        "name": "debug 3",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": true,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "payload.ID_Battery",
-        "statusType": "msg",
-        "x": 1980,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "70f4911cf90c8f98",
-        "type": "comment",
-        "z": "188101eeafe3ebb0",
-        "name": "Purpose of this 'link'",
-        "info": "This link just allows me to group\nthe output of all the possibly many\nmessage queues so they can easily\nbe funneled into a MQTT topic or\nto debug, etc.",
-        "x": 1710,
-        "y": 60,
-        "wires": []
     },
     {
         "id": "c19562efa677ad31",
@@ -1034,7 +935,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 990,
-        "y": 1200,
+        "y": 1460,
         "wires": [
             [
                 "c283e74d54a884b1"
@@ -1057,7 +958,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 1170,
-        "y": 1200,
+        "y": 1460,
         "wires": [
             [
                 "e36d1633af3d7d19"
@@ -1076,7 +977,7 @@
         "template": "/data/raw/battery/battery{{battery_id}}.csv",
         "output": "str",
         "x": 790,
-        "y": 1200,
+        "y": 1460,
         "wires": [
             [
                 "164f93568b438bd4"
@@ -1096,7 +997,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 990,
-        "y": 1240,
+        "y": 1500,
         "wires": [
             [
                 "aaf7283ef171510a"
@@ -1115,7 +1016,7 @@
         "template": "/data/raw/pv/pv{{pv_id}}.csv",
         "output": "str",
         "x": 790,
-        "y": 1240,
+        "y": 1500,
         "wires": [
             [
                 "467d819ab00e3c5f"
@@ -1142,7 +1043,7 @@
         "to": "",
         "reg": false,
         "x": 590,
-        "y": 1200,
+        "y": 1460,
         "wires": [
             [
                 "bb5a6a4e575709ed"
@@ -1169,7 +1070,7 @@
         "to": "",
         "reg": false,
         "x": 580,
-        "y": 1240,
+        "y": 1500,
         "wires": [
             [
                 "f68c3eaaae2229e8"
@@ -1192,7 +1093,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 1170,
-        "y": 1240,
+        "y": 1500,
         "wires": [
             [
                 "fbf23c21c20aa4f0"
@@ -1226,7 +1127,7 @@
         "to": "",
         "reg": false,
         "x": 1340,
-        "y": 1240,
+        "y": 1500,
         "wires": [
             [
                 "943772aed7678303"
@@ -1253,7 +1154,7 @@
         "to": "",
         "reg": false,
         "x": 1330,
-        "y": 1200,
+        "y": 1460,
         "wires": [
             [
                 "b2649b67dbf1fa3f"
@@ -1273,7 +1174,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 990,
-        "y": 1400,
+        "y": 1600,
         "wires": [
             [
                 "c5ee4187fcc0ceca"
@@ -1296,7 +1197,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 1170,
-        "y": 1400,
+        "y": 1600,
         "wires": [
             [
                 "337138e98be85de2"
@@ -1315,7 +1216,7 @@
         "template": "/data/raw/battery/battery{{battery_id}}.csv",
         "output": "str",
         "x": 790,
-        "y": 1400,
+        "y": 1600,
         "wires": [
             [
                 "f11d568197078b38"
@@ -1335,7 +1236,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 990,
-        "y": 1440,
+        "y": 1640,
         "wires": [
             [
                 "35cb2b241a87256b"
@@ -1354,7 +1255,7 @@
         "template": "/data/raw/pv/pv{{pv_id}}.csv",
         "output": "str",
         "x": 790,
-        "y": 1440,
+        "y": 1640,
         "wires": [
             [
                 "0f6e6c43e8698f79"
@@ -1381,7 +1282,7 @@
         "to": "",
         "reg": false,
         "x": 590,
-        "y": 1400,
+        "y": 1600,
         "wires": [
             [
                 "d2c43b91c9e4638b"
@@ -1408,7 +1309,7 @@
         "to": "",
         "reg": false,
         "x": 580,
-        "y": 1440,
+        "y": 1640,
         "wires": [
             [
                 "1ea69b787ae11b64"
@@ -1431,7 +1332,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 1170,
-        "y": 1440,
+        "y": 1640,
         "wires": [
             [
                 "2236218839b5ca82"
@@ -1465,7 +1366,7 @@
         "to": "",
         "reg": false,
         "x": 1340,
-        "y": 1440,
+        "y": 1640,
         "wires": [
             [
                 "f98b7fcf7e34eda8"
@@ -1492,7 +1393,7 @@
         "to": "",
         "reg": false,
         "x": 1330,
-        "y": 1400,
+        "y": 1600,
         "wires": [
             [
                 "d415e3f74d3cae76"
@@ -1512,7 +1413,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 990,
-        "y": 1600,
+        "y": 1740,
         "wires": [
             [
                 "5f955b8117c1f11d"
@@ -1535,7 +1436,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 1170,
-        "y": 1600,
+        "y": 1740,
         "wires": [
             [
                 "1960d87b2b6dea82"
@@ -1554,7 +1455,7 @@
         "template": "/data/raw/battery/battery{{battery_id}}.csv",
         "output": "str",
         "x": 790,
-        "y": 1600,
+        "y": 1740,
         "wires": [
             [
                 "f56d08d8546da27c"
@@ -1574,7 +1475,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 990,
-        "y": 1640,
+        "y": 1780,
         "wires": [
             [
                 "1bd2c8ac9a44960e"
@@ -1593,7 +1494,7 @@
         "template": "/data/raw/pv/pv{{pv_id}}.csv",
         "output": "str",
         "x": 790,
-        "y": 1640,
+        "y": 1780,
         "wires": [
             [
                 "356b9b926eab80f0"
@@ -1620,7 +1521,7 @@
         "to": "",
         "reg": false,
         "x": 590,
-        "y": 1600,
+        "y": 1740,
         "wires": [
             [
                 "12b7bdb7d35969d0"
@@ -1647,7 +1548,7 @@
         "to": "",
         "reg": false,
         "x": 580,
-        "y": 1640,
+        "y": 1780,
         "wires": [
             [
                 "1598cce943d169fb"
@@ -1670,7 +1571,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 1170,
-        "y": 1640,
+        "y": 1780,
         "wires": [
             [
                 "a91baab70da2c907"
@@ -1704,7 +1605,7 @@
         "to": "",
         "reg": false,
         "x": 1340,
-        "y": 1640,
+        "y": 1780,
         "wires": [
             [
                 "e1628abaf2f1b9f8"
@@ -1731,7 +1632,7 @@
         "to": "",
         "reg": false,
         "x": 1330,
-        "y": 1600,
+        "y": 1740,
         "wires": [
             [
                 "c253ccb197f1c765"
@@ -1751,7 +1652,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 990,
-        "y": 1820,
+        "y": 1880,
         "wires": [
             [
                 "8e6563a5424312f3"
@@ -1774,7 +1675,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 1170,
-        "y": 1820,
+        "y": 1880,
         "wires": [
             [
                 "336572f11c637772"
@@ -1793,7 +1694,7 @@
         "template": "/data/raw/battery/battery{{battery_id}}.csv",
         "output": "str",
         "x": 790,
-        "y": 1820,
+        "y": 1880,
         "wires": [
             [
                 "a708f8b05e450660"
@@ -1813,7 +1714,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 990,
-        "y": 1860,
+        "y": 1920,
         "wires": [
             [
                 "351ae1e959f450f2"
@@ -1832,7 +1733,7 @@
         "template": "/data/raw/pv/pv{{pv_id}}.csv",
         "output": "str",
         "x": 790,
-        "y": 1860,
+        "y": 1920,
         "wires": [
             [
                 "cd042437c9bbd618"
@@ -1859,7 +1760,7 @@
         "to": "",
         "reg": false,
         "x": 590,
-        "y": 1820,
+        "y": 1880,
         "wires": [
             [
                 "5d01d740343fefc1"
@@ -1886,7 +1787,7 @@
         "to": "",
         "reg": false,
         "x": 580,
-        "y": 1860,
+        "y": 1920,
         "wires": [
             [
                 "830757c9a25408a3"
@@ -1909,7 +1810,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 1170,
-        "y": 1860,
+        "y": 1920,
         "wires": [
             [
                 "2b7043ba90b7c6b6"
@@ -1943,7 +1844,7 @@
         "to": "",
         "reg": false,
         "x": 1340,
-        "y": 1860,
+        "y": 1920,
         "wires": [
             [
                 "83714d97fcda8dd2"
@@ -1970,7 +1871,7 @@
         "to": "",
         "reg": false,
         "x": 1330,
-        "y": 1820,
+        "y": 1880,
         "wires": [
             [
                 "7540a955d35c703a"
@@ -2236,7 +2137,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 1550,
-        "y": 1200,
+        "y": 1460,
         "wires": [
             [
                 "95df02be96d0ba82"
@@ -2261,7 +2162,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 1550,
-        "y": 1240,
+        "y": 1500,
         "wires": [
             [
                 "95df02be96d0ba82"
@@ -2286,7 +2187,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 1550,
-        "y": 1400,
+        "y": 1600,
         "wires": [
             [
                 "5575cbfc80228817"
@@ -2311,7 +2212,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 1550,
-        "y": 1440,
+        "y": 1640,
         "wires": [
             [
                 "5575cbfc80228817"
@@ -2336,7 +2237,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 1550,
-        "y": 1600,
+        "y": 1740,
         "wires": [
             [
                 "465061dc065a56c6"
@@ -2361,7 +2262,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 1550,
-        "y": 1640,
+        "y": 1780,
         "wires": [
             [
                 "465061dc065a56c6"
@@ -2386,7 +2287,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 1550,
-        "y": 1820,
+        "y": 1880,
         "wires": [
             [
                 "14dbc7d40c4250bd"
@@ -2411,7 +2312,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 1550,
-        "y": 1860,
+        "y": 1920,
         "wires": [
             [
                 "14dbc7d40c4250bd"
@@ -2491,7 +2392,7 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 1730,
-        "y": 1220,
+        "y": 1480,
         "wires": [
             [
                 "aa44c3794f04e42d"
@@ -2519,7 +2420,7 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 1730,
-        "y": 1420,
+        "y": 1620,
         "wires": [
             [
                 "aa44c3794f04e42d"
@@ -2547,7 +2448,7 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 1730,
-        "y": 1620,
+        "y": 1760,
         "wires": [
             [
                 "aa44c3794f04e42d"
@@ -2575,7 +2476,7 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 1730,
-        "y": 1840,
+        "y": 1900,
         "wires": [
             [
                 "aa44c3794f04e42d"
@@ -2621,11 +2522,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2050,
-        "y": 1620,
+        "x": 2010,
+        "y": 1760,
         "wires": [
             [
-                "e897e1c665f60548"
+                "085c2442a261d058"
             ]
         ]
     },
@@ -2633,7 +2534,7 @@
         "id": "fad20bb06c0df79c",
         "type": "inject",
         "z": "188101eeafe3ebb0",
-        "name": "",
+        "name": "start simulation",
         "props": [
             {
                 "p": "payload"
@@ -2650,8 +2551,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 160,
-        "y": 1620,
+        "x": 280,
+        "y": 1760,
         "wires": [
             [
                 "9ac0588671667a56",
@@ -2712,8 +2613,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 210,
-        "y": 2180,
+        "x": 230,
+        "y": 2160,
         "wires": [
             [
                 "d96c8ef6ed75683f",
@@ -2735,8 +2636,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 200,
-        "y": 2120,
+        "x": 220,
+        "y": 2100,
         "wires": [
             [
                 "19078db6683953f5",
@@ -2748,19 +2649,116 @@
         ]
     },
     {
-        "id": "e897e1c665f60548",
+        "id": "3994cc2be2c8ba57",
         "type": "debug",
         "z": "188101eeafe3ebb0",
-        "name": "debug 5",
-        "active": true,
+        "name": "debug 2",
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2300,
-        "y": 1620,
+        "x": 2400,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "5e014141b5e549b0",
+        "type": "mqtt out",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "topic": "pv_battery",
+        "qos": "0",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "c5555d2e3dd06c96",
+        "x": 2410,
+        "y": 1780,
+        "wires": []
+    },
+    {
+        "id": "085c2442a261d058",
+        "type": "link out",
+        "z": "188101eeafe3ebb0",
+        "name": "Output from all Rate Limit (Source)",
+        "mode": "link",
+        "links": [
+            "07c20f09292c98b5"
+        ],
+        "x": 2195,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "07c20f09292c98b5",
+        "type": "link in",
+        "z": "188101eeafe3ebb0",
+        "name": "Output from all Rate Limit (Sink)",
+        "links": [
+            "085c2442a261d058"
+        ],
+        "x": 2295,
+        "y": 1760,
+        "wires": [
+            [
+                "5e014141b5e549b0",
+                "3994cc2be2c8ba57"
+            ]
+        ]
+    },
+    {
+        "id": "66348088ae8a8076",
+        "type": "mqtt in",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "topic": "pv_battery",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "c5555d2e3dd06c96",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1960,
+        "y": 1900,
+        "wires": [
+            [
+                "1c551eb69ab21df4"
+            ]
+        ]
+    },
+    {
+        "id": "1c551eb69ab21df4",
+        "type": "debug",
+        "z": "188101eeafe3ebb0",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload.ID_Battery",
+        "statusType": "msg",
+        "x": 2160,
+        "y": 1900,
+        "wires": []
+    },
+    {
+        "id": "70f4911cf90c8f98",
+        "type": "comment",
+        "z": "188101eeafe3ebb0",
+        "name": "Purpose of this 'link'",
+        "info": "This link just allows me to group\nthe output of all the possibly many\nmessage queues so they can easily\nbe funneled into a MQTT topic or\nto debug, etc.",
+        "x": 2270,
+        "y": 1680,
         "wires": []
     }
 ]
