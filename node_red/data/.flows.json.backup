@@ -2,47 +2,142 @@
     {
         "id": "188101eeafe3ebb0",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "PV Simulation",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "8fad4f9d5cf2899b",
+        "id": "c5555d2e3dd06c96",
+        "type": "mqtt-broker",
+        "name": "Docker MQTT Broker",
+        "broker": "mqtt",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "94405edd896f3970",
+        "type": "influxdb",
+        "hostname": "influx",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "Docker Influx",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "1682bc03b239dcad",
+        "type": "function",
+        "z": "188101eeafe3ebb0",
+        "name": "Array of 1 - N",
+        "func": "function array1ToN(N) {\n    return [...Array(N).keys()].map(n => n + 1)\n}\n\nconst num_batteries = parseInt(msg.num_batteries);\n\nmsg.payload = array1ToN(num_batteries);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 200,
+        "wires": [
+            [
+                "93c00538a297b189"
+            ]
+        ]
+    },
+    {
+        "id": "ce830363474e3d62",
         "type": "inject",
         "z": "188101eeafe3ebb0",
-        "name": "",
+        "name": "num_batteries",
         "props": [
             {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
+                "p": "num_batteries",
+                "v": "5",
+                "vt": "num"
             }
         ],
         "repeat": "",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "/data/raw/battery/battery1.csv",
-        "payload": "",
-        "payloadType": "date",
-        "x": 340,
-        "y": 100,
+        "topic": "",
+        "x": 130,
+        "y": 200,
         "wires": [
             [
-                "a48cb16765d50fc5"
+                "1682bc03b239dcad"
             ]
         ]
     },
     {
-        "id": "79afd76a0ef0b6e4",
+        "id": "93c00538a297b189",
+        "type": "split",
+        "z": "188101eeafe3ebb0",
+        "name": "Split into N messages",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 480,
+        "y": 200,
+        "wires": [
+            [
+                "0021b31d2856ce7c"
+            ]
+        ]
+    },
+    {
+        "id": "b3a07bd26ccf0b90",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 550,
+        "y": 280,
+        "wires": [
+            [
+                "400cdbca7acaaf99"
+            ]
+        ]
+    },
+    {
+        "id": "400cdbca7acaaf99",
         "type": "csv",
         "z": "188101eeafe3ebb0",
         "name": "Parse CSV",
         "sep": ",",
-        "hdrin": "",
+        "hdrin": true,
         "hdrout": "none",
         "multi": "one",
         "ret": "\\n",
@@ -51,52 +146,534 @@
         "strings": true,
         "include_empty_strings": "",
         "include_null_values": "",
-        "x": 710,
-        "y": 100,
+        "x": 730,
+        "y": 280,
         "wires": [
             [
-                "f2c47fa10c24f612"
+                "ae15c05790df9d11"
             ]
         ]
     },
     {
-        "id": "48ef9ea37327e245",
-        "type": "debug",
+        "id": "0021b31d2856ce7c",
+        "type": "change",
         "z": "188101eeafe3ebb0",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1060,
-        "y": 100,
-        "wires": []
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 680,
+        "y": 200,
+        "wires": [
+            [
+                "46095de3adf4c2ba",
+                "3a82b37ba270b218"
+            ]
+        ]
     },
     {
-        "id": "a48cb16765d50fc5",
+        "id": "c1c1fa03a42f08c1",
+        "type": "switch",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "property": "battery_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "4",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "5",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 5,
+        "x": 1070,
+        "y": 300,
+        "wires": [
+            [
+                "0de3f3d291ddd11b"
+            ],
+            [
+                "0e63fad5e834cc2a"
+            ],
+            [
+                "543fcf7cdf344345"
+            ],
+            [
+                "b2dc7472de4fdb4f"
+            ],
+            [
+                "58c804d046d7bb73"
+            ]
+        ]
+    },
+    {
+        "id": "55ccc8b09fa15b12",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/battery/battery{{battery_id}}.csv",
+        "output": "str",
+        "x": 350,
+        "y": 280,
+        "wires": [
+            [
+                "b3a07bd26ccf0b90"
+            ]
+        ]
+    },
+    {
+        "id": "c19562efa677ad31",
         "type": "file in",
         "z": "188101eeafe3ebb0",
-        "name": "read 'msg.topic'",
-        "filename": "topic",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
         "filenameType": "msg",
         "format": "utf8",
         "chunk": false,
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 520,
-        "y": 100,
+        "x": 550,
+        "y": 320,
         "wires": [
             [
-                "79afd76a0ef0b6e4"
+                "e63335409eb426e0"
             ]
         ]
     },
     {
-        "id": "f2c47fa10c24f612",
+        "id": "61a83d24214a8d7a",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/pv/pv{{pv_id}}.csv",
+        "output": "str",
+        "x": 350,
+        "y": 320,
+        "wires": [
+            [
+                "c19562efa677ad31"
+            ]
+        ]
+    },
+    {
+        "id": "46095de3adf4c2ba",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "battery_id",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 150,
+        "y": 280,
+        "wires": [
+            [
+                "55ccc8b09fa15b12"
+            ]
+        ]
+    },
+    {
+        "id": "3a82b37ba270b218",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pv_id",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 140,
+        "y": 320,
+        "wires": [
+            [
+                "61a83d24214a8d7a"
+            ]
+        ]
+    },
+    {
+        "id": "80bff3908e6d9bfc",
+        "type": "switch",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "property": "pv_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "4",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "5",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 5,
+        "x": 1070,
+        "y": 700,
+        "wires": [
+            [
+                "47234b1b54ea8d2a"
+            ],
+            [
+                "1839d9ad2d5bd344"
+            ],
+            [
+                "3f75b1199bfa6169"
+            ],
+            [
+                "5481a43316dd666b"
+            ],
+            [
+                "193f588688894e56"
+            ]
+        ]
+    },
+    {
+        "id": "e63335409eb426e0",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 730,
+        "y": 320,
+        "wires": [
+            [
+                "c1d1728baf758d59"
+            ]
+        ]
+    },
+    {
+        "id": "26b1e139b0ffea89",
+        "type": "join",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1550,
+        "y": 440,
+        "wires": [
+            [
+                "2b59fbc22de5d141"
+            ]
+        ]
+    },
+    {
+        "id": "6be9eced6e36a1a1",
+        "type": "join",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1550,
+        "y": 480,
+        "wires": [
+            [
+                "2b59fbc22de5d141"
+            ]
+        ]
+    },
+    {
+        "id": "4d9408d62f3a4a4e",
+        "type": "join",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1550,
+        "y": 520,
+        "wires": [
+            [
+                "2b59fbc22de5d141"
+            ]
+        ]
+    },
+    {
+        "id": "29d06faf801e4f00",
+        "type": "join",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1550,
+        "y": 560,
+        "wires": [
+            [
+                "2b59fbc22de5d141"
+            ]
+        ]
+    },
+    {
+        "id": "832fd96e2e6631a5",
+        "type": "join",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1550,
+        "y": 600,
+        "wires": [
+            [
+                "2b59fbc22de5d141"
+            ]
+        ]
+    },
+    {
+        "id": "c1d1728baf758d59",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.id_number",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "pv",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 900,
+        "y": 320,
+        "wires": [
+            [
+                "80bff3908e6d9bfc"
+            ]
+        ]
+    },
+    {
+        "id": "ae15c05790df9d11",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "battery",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 890,
+        "y": 280,
+        "wires": [
+            [
+                "c1c1fa03a42f08c1"
+            ]
+        ]
+    },
+    {
+        "id": "2b59fbc22de5d141",
+        "type": "function",
+        "z": "188101eeafe3ebb0",
+        "name": "function 1",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1780,
+        "y": 520,
+        "wires": [
+            [
+                "8713a04e7a25d18e"
+            ]
+        ]
+    },
+    {
+        "id": "8713a04e7a25d18e",
+        "type": "debug",
+        "z": "188101eeafe3ebb0",
+        "name": "debug 4",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1960,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "47234b1b54ea8d2a",
         "type": "delay",
         "z": "188101eeafe3ebb0",
         "name": "",
@@ -112,12 +689,2076 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 890,
-        "y": 100,
+        "x": 1270,
+        "y": 580,
         "wires": [
             [
-                "48ef9ea37327e245"
+                "26b1e139b0ffea89"
             ]
         ]
+    },
+    {
+        "id": "1839d9ad2d5bd344",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 660,
+        "wires": [
+            [
+                "6be9eced6e36a1a1"
+            ]
+        ]
+    },
+    {
+        "id": "3f75b1199bfa6169",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 740,
+        "wires": [
+            [
+                "4d9408d62f3a4a4e"
+            ]
+        ]
+    },
+    {
+        "id": "5481a43316dd666b",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 820,
+        "wires": [
+            [
+                "29d06faf801e4f00"
+            ]
+        ]
+    },
+    {
+        "id": "193f588688894e56",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 900,
+        "wires": [
+            [
+                "832fd96e2e6631a5"
+            ]
+        ]
+    },
+    {
+        "id": "0de3f3d291ddd11b",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 180,
+        "wires": [
+            [
+                "26b1e139b0ffea89"
+            ]
+        ]
+    },
+    {
+        "id": "0e63fad5e834cc2a",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 260,
+        "wires": [
+            [
+                "6be9eced6e36a1a1"
+            ]
+        ]
+    },
+    {
+        "id": "543fcf7cdf344345",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 340,
+        "wires": [
+            [
+                "4d9408d62f3a4a4e"
+            ]
+        ]
+    },
+    {
+        "id": "b2dc7472de4fdb4f",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 420,
+        "wires": [
+            [
+                "29d06faf801e4f00"
+            ]
+        ]
+    },
+    {
+        "id": "58c804d046d7bb73",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 500,
+        "wires": [
+            [
+                "832fd96e2e6631a5"
+            ]
+        ]
+    },
+    {
+        "id": "164f93568b438bd4",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 990,
+        "y": 1460,
+        "wires": [
+            [
+                "c283e74d54a884b1"
+            ]
+        ]
+    },
+    {
+        "id": "c283e74d54a884b1",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1170,
+        "y": 1460,
+        "wires": [
+            [
+                "e36d1633af3d7d19"
+            ]
+        ]
+    },
+    {
+        "id": "bb5a6a4e575709ed",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/battery/battery{{battery_id}}.csv",
+        "output": "str",
+        "x": 790,
+        "y": 1460,
+        "wires": [
+            [
+                "164f93568b438bd4"
+            ]
+        ]
+    },
+    {
+        "id": "467d819ab00e3c5f",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 990,
+        "y": 1500,
+        "wires": [
+            [
+                "aaf7283ef171510a"
+            ]
+        ]
+    },
+    {
+        "id": "f68c3eaaae2229e8",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/pv/pv{{pv_id}}.csv",
+        "output": "str",
+        "x": 790,
+        "y": 1500,
+        "wires": [
+            [
+                "467d819ab00e3c5f"
+            ]
+        ]
+    },
+    {
+        "id": "9ac0588671667a56",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "battery_id",
+                "pt": "msg",
+                "to": "1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 1460,
+        "wires": [
+            [
+                "bb5a6a4e575709ed"
+            ]
+        ]
+    },
+    {
+        "id": "9ea769c02d6b597f",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pv_id",
+                "pt": "msg",
+                "to": "1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 580,
+        "y": 1500,
+        "wires": [
+            [
+                "f68c3eaaae2229e8"
+            ]
+        ]
+    },
+    {
+        "id": "aaf7283ef171510a",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1170,
+        "y": 1500,
+        "wires": [
+            [
+                "fbf23c21c20aa4f0"
+            ]
+        ]
+    },
+    {
+        "id": "fbf23c21c20aa4f0",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.id_number",
+                "pt": "msg",
+                "to": "pv_id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "pv",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1340,
+        "y": 1500,
+        "wires": [
+            [
+                "943772aed7678303"
+            ]
+        ]
+    },
+    {
+        "id": "e36d1633af3d7d19",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "battery",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1330,
+        "y": 1460,
+        "wires": [
+            [
+                "b2649b67dbf1fa3f"
+            ]
+        ]
+    },
+    {
+        "id": "f11d568197078b38",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 990,
+        "y": 1600,
+        "wires": [
+            [
+                "c5ee4187fcc0ceca"
+            ]
+        ]
+    },
+    {
+        "id": "c5ee4187fcc0ceca",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1170,
+        "y": 1600,
+        "wires": [
+            [
+                "337138e98be85de2"
+            ]
+        ]
+    },
+    {
+        "id": "d2c43b91c9e4638b",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/battery/battery{{battery_id}}.csv",
+        "output": "str",
+        "x": 790,
+        "y": 1600,
+        "wires": [
+            [
+                "f11d568197078b38"
+            ]
+        ]
+    },
+    {
+        "id": "0f6e6c43e8698f79",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 990,
+        "y": 1640,
+        "wires": [
+            [
+                "35cb2b241a87256b"
+            ]
+        ]
+    },
+    {
+        "id": "1ea69b787ae11b64",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/pv/pv{{pv_id}}.csv",
+        "output": "str",
+        "x": 790,
+        "y": 1640,
+        "wires": [
+            [
+                "0f6e6c43e8698f79"
+            ]
+        ]
+    },
+    {
+        "id": "bd0f67aca7d135e0",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "battery_id",
+                "pt": "msg",
+                "to": "2",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 1600,
+        "wires": [
+            [
+                "d2c43b91c9e4638b"
+            ]
+        ]
+    },
+    {
+        "id": "d6d250db059677f3",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pv_id",
+                "pt": "msg",
+                "to": "2",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 580,
+        "y": 1640,
+        "wires": [
+            [
+                "1ea69b787ae11b64"
+            ]
+        ]
+    },
+    {
+        "id": "35cb2b241a87256b",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1170,
+        "y": 1640,
+        "wires": [
+            [
+                "2236218839b5ca82"
+            ]
+        ]
+    },
+    {
+        "id": "2236218839b5ca82",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.id_number",
+                "pt": "msg",
+                "to": "pv_id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "pv",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1340,
+        "y": 1640,
+        "wires": [
+            [
+                "f98b7fcf7e34eda8"
+            ]
+        ]
+    },
+    {
+        "id": "337138e98be85de2",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "battery",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1330,
+        "y": 1600,
+        "wires": [
+            [
+                "d415e3f74d3cae76"
+            ]
+        ]
+    },
+    {
+        "id": "f56d08d8546da27c",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 990,
+        "y": 1740,
+        "wires": [
+            [
+                "5f955b8117c1f11d"
+            ]
+        ]
+    },
+    {
+        "id": "5f955b8117c1f11d",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1170,
+        "y": 1740,
+        "wires": [
+            [
+                "1960d87b2b6dea82"
+            ]
+        ]
+    },
+    {
+        "id": "12b7bdb7d35969d0",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/battery/battery{{battery_id}}.csv",
+        "output": "str",
+        "x": 790,
+        "y": 1740,
+        "wires": [
+            [
+                "f56d08d8546da27c"
+            ]
+        ]
+    },
+    {
+        "id": "356b9b926eab80f0",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 990,
+        "y": 1780,
+        "wires": [
+            [
+                "1bd2c8ac9a44960e"
+            ]
+        ]
+    },
+    {
+        "id": "1598cce943d169fb",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/pv/pv{{pv_id}}.csv",
+        "output": "str",
+        "x": 790,
+        "y": 1780,
+        "wires": [
+            [
+                "356b9b926eab80f0"
+            ]
+        ]
+    },
+    {
+        "id": "d39ba2dadaeb12ea",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "battery_id",
+                "pt": "msg",
+                "to": "3",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 1740,
+        "wires": [
+            [
+                "12b7bdb7d35969d0"
+            ]
+        ]
+    },
+    {
+        "id": "c5d7cb2ab323b9ee",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pv_id",
+                "pt": "msg",
+                "to": "3",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 580,
+        "y": 1780,
+        "wires": [
+            [
+                "1598cce943d169fb"
+            ]
+        ]
+    },
+    {
+        "id": "1bd2c8ac9a44960e",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1170,
+        "y": 1780,
+        "wires": [
+            [
+                "a91baab70da2c907"
+            ]
+        ]
+    },
+    {
+        "id": "a91baab70da2c907",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.id_number",
+                "pt": "msg",
+                "to": "pv_id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "pv",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1340,
+        "y": 1780,
+        "wires": [
+            [
+                "e1628abaf2f1b9f8"
+            ]
+        ]
+    },
+    {
+        "id": "1960d87b2b6dea82",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "battery",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1330,
+        "y": 1740,
+        "wires": [
+            [
+                "c253ccb197f1c765"
+            ]
+        ]
+    },
+    {
+        "id": "a708f8b05e450660",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 990,
+        "y": 1880,
+        "wires": [
+            [
+                "8e6563a5424312f3"
+            ]
+        ]
+    },
+    {
+        "id": "8e6563a5424312f3",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1170,
+        "y": 1880,
+        "wires": [
+            [
+                "336572f11c637772"
+            ]
+        ]
+    },
+    {
+        "id": "5d01d740343fefc1",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/battery/battery{{battery_id}}.csv",
+        "output": "str",
+        "x": 790,
+        "y": 1880,
+        "wires": [
+            [
+                "a708f8b05e450660"
+            ]
+        ]
+    },
+    {
+        "id": "cd042437c9bbd618",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 990,
+        "y": 1920,
+        "wires": [
+            [
+                "351ae1e959f450f2"
+            ]
+        ]
+    },
+    {
+        "id": "830757c9a25408a3",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/pv/pv{{pv_id}}.csv",
+        "output": "str",
+        "x": 790,
+        "y": 1920,
+        "wires": [
+            [
+                "cd042437c9bbd618"
+            ]
+        ]
+    },
+    {
+        "id": "6d7781ce20805681",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "battery_id",
+                "pt": "msg",
+                "to": "4",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 1880,
+        "wires": [
+            [
+                "5d01d740343fefc1"
+            ]
+        ]
+    },
+    {
+        "id": "adc3179d16e973a4",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pv_id",
+                "pt": "msg",
+                "to": "4",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 580,
+        "y": 1920,
+        "wires": [
+            [
+                "830757c9a25408a3"
+            ]
+        ]
+    },
+    {
+        "id": "351ae1e959f450f2",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1170,
+        "y": 1920,
+        "wires": [
+            [
+                "2b7043ba90b7c6b6"
+            ]
+        ]
+    },
+    {
+        "id": "2b7043ba90b7c6b6",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.id_number",
+                "pt": "msg",
+                "to": "pv_id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "pv",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1340,
+        "y": 1920,
+        "wires": [
+            [
+                "83714d97fcda8dd2"
+            ]
+        ]
+    },
+    {
+        "id": "336572f11c637772",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "battery",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1330,
+        "y": 1880,
+        "wires": [
+            [
+                "7540a955d35c703a"
+            ]
+        ]
+    },
+    {
+        "id": "21611456d26d1c5a",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 990,
+        "y": 2040,
+        "wires": [
+            [
+                "7616a611d945d910"
+            ]
+        ]
+    },
+    {
+        "id": "7616a611d945d910",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1170,
+        "y": 2040,
+        "wires": [
+            [
+                "0c5f8a91a7d974e1"
+            ]
+        ]
+    },
+    {
+        "id": "5e17910e9a3acd11",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/battery/battery{{battery_id}}.csv",
+        "output": "str",
+        "x": 790,
+        "y": 2040,
+        "wires": [
+            [
+                "21611456d26d1c5a"
+            ]
+        ]
+    },
+    {
+        "id": "5555552a78aec250",
+        "type": "file in",
+        "z": "188101eeafe3ebb0",
+        "name": "read 'msg.filename'",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 990,
+        "y": 2080,
+        "wires": [
+            [
+                "1f803c268460ba3c"
+            ]
+        ]
+    },
+    {
+        "id": "bbadce3e7c2adfd7",
+        "type": "template",
+        "z": "188101eeafe3ebb0",
+        "name": "set 'msg.filename'",
+        "field": "msg.filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "/data/raw/pv/pv{{pv_id}}.csv",
+        "output": "str",
+        "x": 790,
+        "y": 2080,
+        "wires": [
+            [
+                "5555552a78aec250"
+            ]
+        ]
+    },
+    {
+        "id": "19078db6683953f5",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "battery_id",
+                "pt": "msg",
+                "to": "5",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 2040,
+        "wires": [
+            [
+                "5e17910e9a3acd11",
+                "dcf3c3741f0c7978"
+            ]
+        ]
+    },
+    {
+        "id": "d96c8ef6ed75683f",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pv_id",
+                "pt": "msg",
+                "to": "5",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 580,
+        "y": 2080,
+        "wires": [
+            [
+                "bbadce3e7c2adfd7",
+                "f80dbb21a0420fe5"
+            ]
+        ]
+    },
+    {
+        "id": "1f803c268460ba3c",
+        "type": "csv",
+        "z": "188101eeafe3ebb0",
+        "name": "Parse CSV",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1170,
+        "y": 2080,
+        "wires": [
+            [
+                "821ba4e08a6320b8"
+            ]
+        ]
+    },
+    {
+        "id": "821ba4e08a6320b8",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.id_number",
+                "pt": "msg",
+                "to": "pv_id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "pv",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1340,
+        "y": 2080,
+        "wires": [
+            [
+                "8cde4533b338ec14"
+            ]
+        ]
+    },
+    {
+        "id": "0c5f8a91a7d974e1",
+        "type": "change",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "battery",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1330,
+        "y": 2040,
+        "wires": [
+            [
+                "8068ea8086e55d19"
+            ]
+        ]
+    },
+    {
+        "id": "b2649b67dbf1fa3f",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1550,
+        "y": 1460,
+        "wires": [
+            [
+                "95df02be96d0ba82"
+            ]
+        ]
+    },
+    {
+        "id": "943772aed7678303",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1550,
+        "y": 1500,
+        "wires": [
+            [
+                "95df02be96d0ba82"
+            ]
+        ]
+    },
+    {
+        "id": "d415e3f74d3cae76",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1550,
+        "y": 1600,
+        "wires": [
+            [
+                "5575cbfc80228817"
+            ]
+        ]
+    },
+    {
+        "id": "f98b7fcf7e34eda8",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1550,
+        "y": 1640,
+        "wires": [
+            [
+                "5575cbfc80228817"
+            ]
+        ]
+    },
+    {
+        "id": "c253ccb197f1c765",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1550,
+        "y": 1740,
+        "wires": [
+            [
+                "465061dc065a56c6"
+            ]
+        ]
+    },
+    {
+        "id": "e1628abaf2f1b9f8",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1550,
+        "y": 1780,
+        "wires": [
+            [
+                "465061dc065a56c6"
+            ]
+        ]
+    },
+    {
+        "id": "7540a955d35c703a",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1550,
+        "y": 1880,
+        "wires": [
+            [
+                "14dbc7d40c4250bd"
+            ]
+        ]
+    },
+    {
+        "id": "83714d97fcda8dd2",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1550,
+        "y": 1920,
+        "wires": [
+            [
+                "14dbc7d40c4250bd"
+            ]
+        ]
+    },
+    {
+        "id": "8068ea8086e55d19",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1550,
+        "y": 2040,
+        "wires": [
+            [
+                "0c78d2a325aabdea",
+                "26c9755ef5cbcede"
+            ]
+        ]
+    },
+    {
+        "id": "8cde4533b338ec14",
+        "type": "delay",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1550,
+        "y": 2080,
+        "wires": [
+            [
+                "0c78d2a325aabdea",
+                "caa8d89123dbd5ab"
+            ]
+        ]
+    },
+    {
+        "id": "95df02be96d0ba82",
+        "type": "join",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1730,
+        "y": 1480,
+        "wires": [
+            [
+                "aa44c3794f04e42d"
+            ]
+        ]
+    },
+    {
+        "id": "5575cbfc80228817",
+        "type": "join",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1730,
+        "y": 1620,
+        "wires": [
+            [
+                "aa44c3794f04e42d"
+            ]
+        ]
+    },
+    {
+        "id": "465061dc065a56c6",
+        "type": "join",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1730,
+        "y": 1760,
+        "wires": [
+            [
+                "aa44c3794f04e42d"
+            ]
+        ]
+    },
+    {
+        "id": "14dbc7d40c4250bd",
+        "type": "join",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1730,
+        "y": 1900,
+        "wires": [
+            [
+                "aa44c3794f04e42d"
+            ]
+        ]
+    },
+    {
+        "id": "0c78d2a325aabdea",
+        "type": "join",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1730,
+        "y": 2060,
+        "wires": [
+            [
+                "aa44c3794f04e42d"
+            ]
+        ]
+    },
+    {
+        "id": "aa44c3794f04e42d",
+        "type": "function",
+        "z": "188101eeafe3ebb0",
+        "name": "Fix property names and merge",
+        "func": "\nconst pv = {\n    Time: msg.payload.pv.Time,\n    PV_voltage: msg.payload.pv.Voltage,\n    PV_current: msg.payload.pv.Current,\n    PV_id: msg.payload.pv.id_number\n}\n\nmsg.payload = {\n    ...pv,\n    ...msg.payload.battery\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2010,
+        "y": 1760,
+        "wires": [
+            [
+                "085c2442a261d058"
+            ]
+        ]
+    },
+    {
+        "id": "fad20bb06c0df79c",
+        "type": "inject",
+        "z": "188101eeafe3ebb0",
+        "name": "start simulation",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 1760,
+        "wires": [
+            [
+                "9ac0588671667a56",
+                "9ea769c02d6b597f",
+                "bd0f67aca7d135e0",
+                "d6d250db059677f3",
+                "d39ba2dadaeb12ea",
+                "c5d7cb2ab323b9ee",
+                "6d7781ce20805681",
+                "adc3179d16e973a4",
+                "19078db6683953f5",
+                "d96c8ef6ed75683f"
+            ]
+        ]
+    },
+    {
+        "id": "dcf3c3741f0c7978",
+        "type": "function",
+        "z": "188101eeafe3ebb0",
+        "name": "reset battery counter",
+        "func": "flow.set(\"battery_counter\", 0);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 2000,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f80dbb21a0420fe5",
+        "type": "function",
+        "z": "188101eeafe3ebb0",
+        "name": "reset pv counter",
+        "func": "flow.set(\"pv_counter\", 0);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 2120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "caa8d89123dbd5ab",
+        "type": "function",
+        "z": "188101eeafe3ebb0",
+        "name": "check pv counter",
+        "func": "\nflow.set(\"pv_counter\", flow.get(\"pv_counter\") + 1);\n\nif (flow.get(\"pv_counter\") >= 15605) {\n    return msg;\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 2160,
+        "wires": [
+            [
+                "d96c8ef6ed75683f",
+                "adc3179d16e973a4",
+                "c5d7cb2ab323b9ee",
+                "d6d250db059677f3",
+                "9ea769c02d6b597f"
+            ]
+        ]
+    },
+    {
+        "id": "26c9755ef5cbcede",
+        "type": "function",
+        "z": "188101eeafe3ebb0",
+        "name": "check battery counter",
+        "func": "\nflow.set(\"battery_counter\", flow.get(\"battery_counter\") + 1);\n\nif(flow.get(\"battery_counter\") >= 2880){\n    return msg;\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 220,
+        "y": 2100,
+        "wires": [
+            [
+                "19078db6683953f5",
+                "6d7781ce20805681",
+                "d39ba2dadaeb12ea",
+                "bd0f67aca7d135e0",
+                "9ac0588671667a56"
+            ]
+        ]
+    },
+    {
+        "id": "3994cc2be2c8ba57",
+        "type": "debug",
+        "z": "188101eeafe3ebb0",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2400,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "5e014141b5e549b0",
+        "type": "mqtt out",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "topic": "pv_battery",
+        "qos": "0",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "c5555d2e3dd06c96",
+        "x": 2410,
+        "y": 1780,
+        "wires": []
+    },
+    {
+        "id": "085c2442a261d058",
+        "type": "link out",
+        "z": "188101eeafe3ebb0",
+        "name": "Output from all Rate Limit (Source)",
+        "mode": "link",
+        "links": [
+            "07c20f09292c98b5"
+        ],
+        "x": 2195,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "07c20f09292c98b5",
+        "type": "link in",
+        "z": "188101eeafe3ebb0",
+        "name": "Output from all Rate Limit (Sink)",
+        "links": [
+            "085c2442a261d058"
+        ],
+        "x": 2295,
+        "y": 1760,
+        "wires": [
+            [
+                "5e014141b5e549b0",
+                "3994cc2be2c8ba57"
+            ]
+        ]
+    },
+    {
+        "id": "66348088ae8a8076",
+        "type": "mqtt in",
+        "z": "188101eeafe3ebb0",
+        "name": "",
+        "topic": "pv_battery",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "c5555d2e3dd06c96",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1960,
+        "y": 1900,
+        "wires": [
+            [
+                "1c551eb69ab21df4"
+            ]
+        ]
+    },
+    {
+        "id": "1c551eb69ab21df4",
+        "type": "debug",
+        "z": "188101eeafe3ebb0",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload.ID_Battery",
+        "statusType": "msg",
+        "x": 2160,
+        "y": 1900,
+        "wires": []
+    },
+    {
+        "id": "70f4911cf90c8f98",
+        "type": "comment",
+        "z": "188101eeafe3ebb0",
+        "name": "Purpose of this 'link'",
+        "info": "This link just allows me to group\nthe output of all the possibly many\nmessage queues so they can easily\nbe funneled into a MQTT topic or\nto debug, etc.",
+        "x": 2270,
+        "y": 1680,
+        "wires": []
     }
 ]
