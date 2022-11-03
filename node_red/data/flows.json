@@ -8,6 +8,14 @@
         "env": []
     },
     {
+        "id": "90c3e34dc24fca90",
+        "type": "tab",
+        "label": "Battery Charging",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "c5555d2e3dd06c96",
         "type": "mqtt-broker",
         "name": "Docker MQTT Broker",
@@ -40,7 +48,7 @@
         "hostname": "influx",
         "port": "8086",
         "protocol": "http",
-        "database": "database",
+        "database": "solar",
         "name": "Docker Influx",
         "usetls": false,
         "tls": "",
@@ -2730,7 +2738,8 @@
         "y": 1900,
         "wires": [
             [
-                "1c551eb69ab21df4"
+                "1c551eb69ab21df4",
+                "9284839fc3c42e81"
             ]
         ]
     },
@@ -2759,6 +2768,118 @@
         "info": "This link just allows me to group\nthe output of all the possibly many\nmessage queues so they can easily\nbe funneled into a MQTT topic or\nto debug, etc.",
         "x": 2270,
         "y": 1680,
+        "wires": []
+    },
+    {
+        "id": "9284839fc3c42e81",
+        "type": "influxdb out",
+        "z": "188101eeafe3ebb0",
+        "influxdb": "94405edd896f3970",
+        "name": "",
+        "measurement": "pv_battery",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 2230,
+        "y": 1960,
+        "wires": []
+    },
+    {
+        "id": "dd4ad7cdfb53d7ed",
+        "type": "function",
+        "z": "90c3e34dc24fca90",
+        "name": "function 2",
+        "func": "\nconst batteryId = `battery${msg.payload.ID_Battery}`;\nconst batteryReason = batteryId + '_reason';\nconst batteryCharging = batteryId + '_charging';\n\nconst PV_energy = Number(msg.payload.PV_current) * Number(msg.payload.PV_voltage);\n\nfunction setCharging(charging=true, reason=null){\n    context.set(batteryCharging, charging);\n    context.set(batteryReason, reason);\n}\n\nfunction main(){\n    if (Number(msg.payload.SOC) < 70) {\n        console.log('Battery needs charging');\n        setCharging(true, 'battery_soc');\n    } else if (Number(msg.payload.SOC) >= 95) {\n        console.log('Does not require charging');\n        setCharging(false);\n    }\n\n    if (PV_energy >= 500) {\n        setCharging(true, 'pv_energy');\n        console.log('High PV energy')\n    } else {\n        if (context.get(batteryReason) === 'pv_energy') {\n            console.log('Low PV energy')\n            setCharging(false);\n        }\n    }\n}\n\n\nreturn null;\n\n\n// return {\n//     Time: msg.payload.Time,\n//     ID_Battery: msg.payload.ID_Battery,\n//     PV_energy,\n//     SOC: msg.payload.SOC,\n//     Charging: stringToBool(context.get(batteryCharging)),\n//     Charging_Reason: context.get(batteryReason)\n// }",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "for(let i = 1; i <= 5; i++){\n    const batteryId = `battery${i}`;\n    const batteryReason = batteryId + '_reason';\n    const batteryCharging = batteryId + '_charging';\n\n    context.set(batteryCharging, false);\n    context.set(batteryReason, null);\n}",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 360,
+        "wires": [
+            [
+                "6f5ae0bd5ac9ccd4",
+                "95cdbd3fd0f6664b",
+                "5c3599046ecc80fc"
+            ]
+        ]
+    },
+    {
+        "id": "a62ac820aabff374",
+        "type": "mqtt in",
+        "z": "90c3e34dc24fca90",
+        "name": "",
+        "topic": "pv_battery",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "c5555d2e3dd06c96",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 360,
+        "wires": [
+            [
+                "dd4ad7cdfb53d7ed"
+            ]
+        ]
+    },
+    {
+        "id": "6f5ae0bd5ac9ccd4",
+        "type": "mqtt out",
+        "z": "90c3e34dc24fca90",
+        "name": "",
+        "topic": "battery_charging",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "c5555d2e3dd06c96",
+        "x": 690,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "95cdbd3fd0f6664b",
+        "type": "influxdb out",
+        "z": "90c3e34dc24fca90",
+        "influxdb": "94405edd896f3970",
+        "name": "",
+        "measurement": "battery_charging",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 750,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "5c3599046ecc80fc",
+        "type": "debug",
+        "z": "90c3e34dc24fca90",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 480,
         "wires": []
     }
 ]
