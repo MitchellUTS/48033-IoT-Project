@@ -415,5 +415,244 @@
                 "file": "/usr/src/node-red/node_modules/@node-red/nodes/core/storage/23-watch.js"
             }
         }
+    },
+    "dashboard-evi": {
+        "name": "dashboard-evi",
+        "version": "1.0.2",
+        "local": true,
+        "user": false,
+        "nodes": {
+            "ui_base": {
+                "name": "ui_base",
+                "types": [
+                    "ui_base"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_base.js"
+            },
+            "ui_button": {
+                "name": "ui_button",
+                "types": [
+                    "ui_button"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_button.js"
+            },
+            "ui_dropdown": {
+                "name": "ui_dropdown",
+                "types": [
+                    "ui_dropdown"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_dropdown.js"
+            },
+            "ui_switch": {
+                "name": "ui_switch",
+                "types": [
+                    "ui_switch"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_switch.js"
+            },
+            "ui_slider": {
+                "name": "ui_slider",
+                "types": [
+                    "ui_slider"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_slider.js"
+            },
+            "ui_numeric": {
+                "name": "ui_numeric",
+                "types": [
+                    "ui_numeric"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_numeric.js"
+            },
+            "ui_text_input": {
+                "name": "ui_text_input",
+                "types": [
+                    "ui_text_input"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_text_input.js"
+            },
+            "ui_date_picker": {
+                "name": "ui_date_picker",
+                "types": [
+                    "ui_date_picker"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_date_picker.js"
+            },
+            "ui_colour_picker": {
+                "name": "ui_colour_picker",
+                "types": [
+                    "ui_colour_picker"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_colour_picker.js"
+            },
+            "ui_form": {
+                "name": "ui_form",
+                "types": [
+                    "ui_form"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_form.js"
+            },
+            "ui_text": {
+                "name": "ui_text",
+                "types": [
+                    "ui_text"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_text.js"
+            },
+            "ui_gauge": {
+                "name": "ui_gauge",
+                "types": [
+                    "ui_gauge"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_gauge.js"
+            },
+            "ui_chart": {
+                "name": "ui_chart",
+                "types": [
+                    "ui_chart"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_chart.js"
+            },
+            "ui_audio": {
+                "name": "ui_audio",
+                "types": [
+                    "ui_audio"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_audio.js"
+            },
+            "ui_toast": {
+                "name": "ui_toast",
+                "types": [
+                    "ui_toast"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_toast.js"
+            },
+            "ui_ui_control": {
+                "name": "ui_ui_control",
+                "types": [
+                    "ui_ui_control"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_ui_control.js"
+            },
+            "ui_template": {
+                "name": "ui_template",
+                "types": [
+                    "ui_template"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_template.js"
+            },
+            "ui_link": {
+                "name": "ui_link",
+                "types": [
+                    "ui_link"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_link.js"
+            },
+            "ui_tab": {
+                "name": "ui_tab",
+                "types": [
+                    "ui_tab"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_tab.js"
+            },
+            "ui_group": {
+                "name": "ui_group",
+                "types": [
+                    "ui_group"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_group.js"
+            },
+            "ui_spacer": {
+                "name": "ui_spacer",
+                "types": [
+                    "ui_spacer"
+                ],
+                "enabled": false,
+                "local": true,
+                "user": false,
+                "module": "dashboard-evi",
+                "file": "/data/node_modules/dashboard-evi/nodes/ui_spacer.js"
+            }
+        }
     }
 }
